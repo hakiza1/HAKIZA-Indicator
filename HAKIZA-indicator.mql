@@ -1,0 +1,91 @@
+//+------------------------------------------------------------------+
+//| HAKIZA-1i Indicator                                              |
+//|                                                                  |
+//+------------------------------------------------------------------+
+#property copyright "HAKIZA-TECHNOLOGY (HATEC)"
+#property version   "1.00"
+#property indicator_separate_window  // Place indicator in a separate subwindow
+#property indicator_buffers 1        // One buffer for zigzag points
+#property indicator_color1 clrRed    // Color for zigzag points
+
+// Buffer for zigzag points
+double ZigzagBuffer[];
+
+
+// Variables for tracking reversals
+int    last_candle_color = 0;        // Tracks the color of the last candle
+bool   expecting_high = true;        // Alternates between expecting a high or low
+
+//+------------------------------------------------------------------+
+//| Initialization function                                          |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+   // Set up indicator buffers
+   SetIndexBuffer(0, ZigzagBuffer);
+   
+   // Set labels for the indicator
+   IndicatorShortName("Zigzag Reversal (Infinite)");
+   return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//| Deinitialization function                                        |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+   // Clean up resources if needed
+}
+
+//+------------------------------------------------------------------+
+//| Main calculation function                                        |
+//+------------------------------------------------------------------+
+int OnCalculate(const int rates_total,
+                const int prev_calculated,
+                const datetime &time[],
+                const double &open[],
+                const double &high[],
+                const double &low[],
+                const double &close[],
+                const long &tick_volume[],
+                const long &volume[],
+                const int &spread[])
+{
+   // Start calculation from the second candle
+   int start_index = MathMax(prev_calculated - 2, 1);
+   
+   for (int i = start_index; i < rates_total; i++)
+   {
+      // Determine candle colors
+      int current_candle_color = (close[i] >= open[i]) ? 1 : -1;
+      int last_candle_color = (i > 0 && close[i - 1] >= open[i - 1]) ? 1 : -1;
+      int second_last_candle_color = (i > 1 && close[i - 2] >= open[i - 2]) ? 1 : -1;
+      
+      // Check for reversal
+      bool is_reversal = (second_last_candle_color != last_candle_color);
+      
+      if (is_reversal)
+      {
+         // Alternate between expecting a high or low
+         if (expecting_high)
+         {
+            // Mark a high point
+            ZigzagBuffer[i] = high[i];
+            expecting_high = false; // Next reversal should be a low
+         }
+         else
+         {
+            // Mark a low point
+            ZigzagBuffer[i] = low[i];
+            expecting_high = true; // Next reversal should be a high
+         }
+      }
+      else
+      {
+         // No reversal, reset zigzag buffer
+         ZigzagBuffer[i] = EMPTY_VALUE;
+      }
+   }
+   
+   return(rates_total);
+}
