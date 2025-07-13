@@ -1,7 +1,7 @@
 # HAKIZA-Indicator
 ---
 
-The HAKIZA-Indicator is a tool that can be used to geometrically visualize the MMB via the metatrader (MT5).
+The HAKIZA-Indicator is a tool that can be used to geometrically visualize the BOT2 of the MMB via the metatrader (MT5).
 
 ### Key Features
 
