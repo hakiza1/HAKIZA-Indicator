@@ -49,3 +49,9 @@ The HAKIZA-Indicator is a tool that can be used to geometrically visualize the *
 1. Copy the code into the MetaEditor in MT5.
 2. Compile the code to generate the indicator file (`.ex5`).
 3. Attach the indicator to your chart. It will appear in a separate subwindow below the main chart, showing disconnected zigzag points that alternate between highs and lows.
+
+
+# RUN YOUR OWN TEST AND EMBRACE THE FACTS
+==========================================================================================================================================================
+(HATEC)   HAKIZA-TECHNOLOGY, developer: Olivier HAKIZIMANA                                                                               hakiza1@proton.me
+==========================================================================================================================================================
